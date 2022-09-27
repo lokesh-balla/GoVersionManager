@@ -1,9 +1,9 @@
 package main
 
 import (
-  "github.com/Lokesh-Balla/GoVersionManager/cmd"
+	"github.com/Lokesh-Balla/GoVersionManager/cmd"
 )
 
 func main() {
-  cmd.Execute()
+	cmd.Execute()
 }
