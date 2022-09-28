@@ -3,9 +3,12 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	bolt "go.etcd.io/bbolt"
+	"golang.org/x/term"
 )
 
 var (
@@ -17,6 +20,13 @@ var (
 
 	GoInstallationDirectory string
 	GoPathFile              string
+
+	DBPath       string
+	DB           *bolt.DB
+	DBBucketName string = "METADATA"
+
+	TerminalWidth  int
+	TerminalHeight int
 )
 
 func init() {
@@ -25,14 +35,27 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	GoInstallationDirectory = fmt.Sprintf("%s/.gvm", HomeDirectory)
-	GoPathFile = fmt.Sprintf("%s/go_path", GoInstallationDirectory)
 
+	GoInstallationDirectory = fmt.Sprintf("%s/.gvm", HomeDirectory)
 	if _, err := os.Stat(GoInstallationDirectory); os.IsNotExist(err) {
 		if err := os.Mkdir(GoInstallationDirectory, 0775); err != nil {
 			panic(err)
 		}
 	}
+	GoPathFile = fmt.Sprintf("%s/go_path", GoInstallationDirectory)
+
+	TerminalWidth, TerminalHeight, err = term.GetSize(int(os.Stdout.Fd()))
+	if err != nil {
+		panic(err)
+	}
+
+	DBPath = fmt.Sprintf("%s/metadata.db", GoInstallationDirectory)
+
+	DB, err = bolt.Open(DBPath, 0666, &bolt.Options{Timeout: 2 * time.Second})
+	if err != nil {
+		panic(err)
+	}
+
 }
 
 // Execute executes the root command.
