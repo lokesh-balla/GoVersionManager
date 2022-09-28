@@ -6,4 +6,5 @@ import (
 
 func main() {
 	cmd.Execute()
+	defer cmd.DB.Close()
 }

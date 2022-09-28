@@ -15,17 +15,8 @@ import (
 
 	"github.com/muesli/termenv"
 	"github.com/spf13/cobra"
-	"golang.org/x/term"
+	bolt "go.etcd.io/bbolt"
 )
-
-var (
-	TerminalWidth  int
-	TerminalHeight int
-)
-
-func init() {
-	TerminalWidth, TerminalHeight, _ = term.GetSize(int(os.Stdout.Fd()))
-}
 
 // installCmd represents the install command
 var installCmd = &cobra.Command{
@@ -37,11 +28,12 @@ var installCmd = &cobra.Command{
 	$ gvm install go1.19
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-
 		if len(args) == 1 {
 			if err := installGolang(args[0]); err != nil {
 				panic(err)
 			}
+		} else {
+			fmt.Println("only a single argument allowed for command install")
 		}
 	},
 }
@@ -171,17 +163,14 @@ func installGolang(version string) error {
 		return err
 	}
 
-	// set PATH
-	f, err := os.OpenFile(GoPathFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	if _, err := fmt.Fprintf(f, "export PATH=%s/%s/go/bin:$PATH", GoInstallationDirectory, version); err != nil {
-		return err
-	}
-
-	return nil
+	// update metadate DB with installed version
+	return DB.Update(func(tx *bolt.Tx) error {
+		bucket, err := tx.CreateBucketIfNotExists([]byte(DBBucketName))
+		if err != nil {
+			return err
+		}
+		return bucket.Put([]byte(version), []byte{})
+	})
 }
 
 func extractGoTar(filePath string, targetPath string) error {

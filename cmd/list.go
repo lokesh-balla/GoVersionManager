@@ -9,6 +9,7 @@ import (
 
 	"github.com/muesli/termenv"
 	"github.com/spf13/cobra"
+	bolt "go.etcd.io/bbolt"
 )
 
 const (
@@ -86,4 +87,44 @@ func getGoDownloadPackageInfo(version string) *packageInfo {
 		}
 	}
 	return nil
+}
+
+func checkVersionInstalled(version string) bool {
+	exists := false
+	if err := DB.View(func(tx *bolt.Tx) error {
+		bucket := tx.Bucket([]byte(DBBucketName))
+		if bucket == nil {
+			return fmt.Errorf("bucket %v does not exist", version)
+		}
+
+		if bucket.Get([]byte(version)) != nil {
+			exists = true
+		}
+
+		return nil
+	}); err != nil {
+		panic(err)
+	}
+	return exists
+}
+
+func checkVersionDefault(version string) bool {
+	defaultVersion := false
+
+	if err := DB.View(func(tx *bolt.Tx) error {
+		bucket := tx.Bucket([]byte(DBBucketName))
+		if bucket == nil {
+			return fmt.Errorf("bucket %v does not exist", version)
+		}
+
+		if string(bucket.Get([]byte(version))) == "default" {
+			defaultVersion = true
+		}
+
+		return nil
+	}); err != nil {
+		panic(err)
+	}
+
+	return defaultVersion
 }

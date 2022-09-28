@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/viper v1.13.0
+	go.etcd.io/bbolt v1.3.6
 )
 
 require (
