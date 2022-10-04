@@ -24,7 +24,7 @@ var (
 	}
 
 	GoInstallationDirectory string
-	GoPathFile              string
+	GoPath              string
 
 	DBPath string
 	DB     *bolt.DB
@@ -47,7 +47,7 @@ func Execute() error {
 			return err
 		}
 	}
-	GoPathFile = fmt.Sprintf("%s/go_path", GoInstallationDirectory)
+	GoPath = fmt.Sprintf("%s/go", GoInstallationDirectory)
 
 	TerminalWidth, TerminalHeight, err = term.GetSize(int(os.Stdout.Fd()))
 	if err != nil {

@@ -44,13 +44,9 @@ func setGoVersion(version string) error {
 		return fmt.Errorf("specified version: %s is not installed", version)
 	}
 
-	// set PATH
-	f, err := os.OpenFile(GoPathFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	if _, err := fmt.Fprintf(f, "export PATH=%s/%s/go/bin:$PATH", GoInstallationDirectory, version); err != nil {
+	// symlink to GoPath
+	os.Remove(GoPath)
+	if err := os.Symlink(fmt.Sprintf("%v/%v/go", GoInstallationDirectory, version), GoPath); err != nil {
 		return err
 	}
 

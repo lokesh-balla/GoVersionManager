@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"runtime"
 	"sort"
 
@@ -80,16 +81,14 @@ func getAvailableGoVersions() (goVersions, error) {
 
 func listGoVersions(all bool) error {
 
-	// output := termenv.NewOutput(os.Stdout)
-	// output.WriteString()
-
 	fmt.Printf("OS: %v ARCH: %v\n\n", termenv.String(runtime.GOOS).Italic().Foreground(termenv.ANSIGreen), termenv.String(runtime.GOARCH).Italic().Foreground(termenv.ANSIGreen))
 
 	fmt.Println(termenv.String("Installed Versions").Bold().Foreground(termenv.ANSIBlue))
 
 	goVersions, err := listAllInstalledVersions()
 	if err != nil {
-		return err
+		fmt.Fprintln(os.Stderr, err)
+		goVersions = map[string]string{}
 	}
 
 	versions := []string{}
