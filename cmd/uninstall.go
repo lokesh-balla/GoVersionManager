@@ -17,14 +17,15 @@ var uninstallCmd = &cobra.Command{
 		# To remove a specific version
 		$ gvm uninstall 1.19
 	`,
-	Run: func(cmd *cobra.Command, args []string) {
+	SilenceErrors: true,
+	SilenceUsage:  true,
+	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 1 {
 			if err := removeGoVersion(args[0]); err != nil {
-				panic(err)
+				return err
 			}
-		} else {
-			fmt.Println("only a single argument allowed for command uninstall")
 		}
+		return nil
 	},
 }
 
@@ -35,11 +36,19 @@ func init() {
 func removeGoVersion(version string) error {
 
 	// check if valid installed version
-	if !checkVersionInstalled(version) {
+	ok, err := checkVersionInstalled(version)
+	if err != nil {
+		return err
+	}
+	if !ok {
 		return fmt.Errorf("specified version: %s is not installed", version)
 	}
 
-	if checkVersionDefault(version) {
+	ok, err = checkVersionDefault(version)
+	if err != nil {
+		return err
+	}
+	if ok {
 		return fmt.Errorf("present version of golang is set as default, please change it and try again")
 	}
 

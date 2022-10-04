@@ -27,14 +27,15 @@ var installCmd = &cobra.Command{
 	# To install a specific version
 	$ gvm install go1.19
 	`,
-	Run: func(cmd *cobra.Command, args []string) {
+	SilenceErrors: true,
+	SilenceUsage:  true,
+	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 1 {
 			if err := installGolang(args[0]); err != nil {
-				panic(err)
+				return err
 			}
-		} else {
-			fmt.Println("only a single argument allowed for command install")
 		}
+		return nil
 	},
 }
 
@@ -43,20 +44,21 @@ func init() {
 }
 
 func drawProgressBar(output *termenv.Output, file string, width int, percent float64) {
-	if width < 0 || width > 80 {
-		width = 80
+
+	if width < 0 || width > 120 {
+		width = 120
 	}
-	drawString := fmt.Sprintf("%s [", file)
-	width = width - len(drawString) - 10
+	drawString := fmt.Sprintf("%s ", termenv.String(file).Bold().Foreground(termenv.ANSIBlue))
+	width = width - len(file) - 10
 	barPercent := (percent / 100) * float64(width)
 	for i := 0; i < width; i++ {
 		if i <= int(barPercent) {
-			drawString = fmt.Sprintf("%s%s", drawString, "=")
+			drawString = fmt.Sprintf("%s%s", drawString, termenv.String(" ").Background(termenv.ANSIGreen))
 		} else {
 			drawString = fmt.Sprintf("%s%s", drawString, " ")
 		}
 	}
-	drawString = fmt.Sprintf("%s] %.0f%%", drawString, percent)
+	drawString = fmt.Sprintf("%s %.0f%%", drawString, percent)
 	output.WriteString(drawString)
 }
 
@@ -77,6 +79,7 @@ func progressBar(file string, size int, done chan bool) error {
 			output.ClearLine()
 			output.RestoreCursorPosition()
 			drawProgressBar(output, file, TerminalWidth, 100)
+			fmt.Println()
 			return nil
 		case <-t.C:
 			fileStat, err := os.Stat(file)
@@ -106,7 +109,7 @@ func downloadGolang(filePath string, url string) error {
 	done := make(chan bool)
 	go func() {
 		if err := progressBar(filePath, size, done); err != nil {
-			panic(err)
+			fmt.Fprintln(os.Stderr, err)
 		}
 	}()
 
@@ -134,9 +137,9 @@ func downloadGolang(filePath string, url string) error {
 
 func installGolang(version string) error {
 
-	pInfo := getGoDownloadPackageInfo(version)
-	if pInfo == nil {
-		return fmt.Errorf("could not find go version: %v", version)
+	pInfo, err := getGoDownloadPackageInfo(version)
+	if err != nil {
+		return err
 	}
 
 	url := fmt.Sprintf("%v/%v", GO_DOWNLOAD_SERVER_URL, pInfo.Filename)
@@ -155,22 +158,38 @@ func installGolang(version string) error {
 		return err
 	}
 	if !valid {
+		fmt.Printf("%v sha256 failed\n", termenv.String("✗ ").Foreground(termenv.ANSIBrightRed))
+		os.Remove(filePath)
 		return fmt.Errorf("downloaded file has invalid sha256sum")
 	}
+	fmt.Printf("%v sha256 passed\n", termenv.String("✔ ").Foreground(termenv.ANSIBrightGreen))
 
 	// extract Go
+	fmt.Println("📦 un-taring go package")
 	if err := extractGoTar(filePath, fmt.Sprintf("%s/%s", GoInstallationDirectory, version)); err != nil {
+		fmt.Printf("%v un-taring failed\n", termenv.String("✗ ").Foreground(termenv.ANSIBrightRed))
 		return err
 	}
+	fmt.Printf("%v un-taring successful\n", termenv.String("✔ ").Foreground(termenv.ANSIBrightGreen))
 
 	// update metadate DB with installed version
-	return DB.Update(func(tx *bolt.Tx) error {
+	if err := DB.Update(func(tx *bolt.Tx) error {
 		bucket, err := tx.CreateBucketIfNotExists([]byte(DBBucketName))
 		if err != nil {
 			return err
 		}
 		return bucket.Put([]byte(version), []byte{})
-	})
+	}); err != nil {
+		return err
+	}
+
+	fmt.Println("🧹 cleaning up downloaded tar")
+	if err := os.Remove(filePath); err != nil {
+		return err
+	}
+
+	fmt.Printf("🥳 %v successfully installed\n\n# To set %v as default:\n\t$ gvm use %v\n\n", version, version, version)
+	return nil
 }
 
 func extractGoTar(filePath string, targetPath string) error {
