@@ -11,6 +11,11 @@ import (
 	"golang.org/x/term"
 )
 
+const (
+	DBBucketName = "METADATA"
+	DEFAULT      = "default"
+)
+
 var (
 	rootCmd = &cobra.Command{
 		Use:   "gvm",
@@ -21,45 +26,41 @@ var (
 	GoInstallationDirectory string
 	GoPathFile              string
 
-	DBPath       string
-	DB           *bolt.DB
-	DBBucketName string = "METADATA"
+	DBPath string
+	DB     *bolt.DB
 
 	TerminalWidth  int
 	TerminalHeight int
 )
 
-func init() {
+// Execute executes the root command.
+func Execute() error {
 
 	HomeDirectory, err := os.UserHomeDir()
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	GoInstallationDirectory = fmt.Sprintf("%s/.gvm", HomeDirectory)
 	if _, err := os.Stat(GoInstallationDirectory); os.IsNotExist(err) {
 		if err := os.Mkdir(GoInstallationDirectory, 0775); err != nil {
-			panic(err)
+			return err
 		}
 	}
 	GoPathFile = fmt.Sprintf("%s/go_path", GoInstallationDirectory)
 
 	TerminalWidth, TerminalHeight, err = term.GetSize(int(os.Stdout.Fd()))
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	DBPath = fmt.Sprintf("%s/metadata.db", GoInstallationDirectory)
 
 	DB, err = bolt.Open(DBPath, 0666, &bolt.Options{Timeout: 2 * time.Second})
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-}
-
-// Execute executes the root command.
-func Execute() error {
 	return rootCmd.Execute()
 }
 

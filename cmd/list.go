@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"runtime"
+	"sort"
 
 	"github.com/muesli/termenv"
 	"github.com/spf13/cobra"
@@ -18,16 +19,27 @@ const (
 
 // listCmd represents the list command
 var listCmd = &cobra.Command{
-	Use:   "list",
-	Short: "Lists all the go versions available",
-	Long:  `Lists all the go version available`,
-	Run: func(cmd *cobra.Command, args []string) {
-		listGoVersions()
+	Use:           "list",
+	Short:         "Lists all the go versions installed",
+	Long:          `Lists all the go version installed`,
+	SilenceErrors: true,
+	SilenceUsage:  true,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		getAll, err := cmd.Flags().GetBool("all")
+		if err != nil {
+			return err
+		}
+		err = listGoVersions(getAll)
+		if err != nil {
+			return err
+		}
+		return nil
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(listCmd)
+	listCmd.PersistentFlags().BoolP("all", "a", false, "list all the available versions")
 }
 
 type goVersions []struct {
@@ -46,55 +58,123 @@ type packageInfo struct {
 	Kind     string `json:"kind"`
 }
 
-func getAvailableGoVersions() goVersions {
+func getAvailableGoVersions() (goVersions, error) {
 	resp, err := http.Get(fmt.Sprintf("%v/?mode=json&include=all", GO_DOWNLOAD_SERVER_URL))
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	gv := goVersions{}
 	err = json.Unmarshal(body, &gv)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	return gv
+	return gv, nil
 }
 
-func listGoVersions() {
-	fmt.Printf("Listing Version for OS: %v ARCH: %v\n", termenv.String(runtime.GOOS).Italic(), termenv.String(runtime.GOARCH).Italic())
+func listGoVersions(all bool) error {
 
-	for _, tag := range getAvailableGoVersions() {
-		for _, pkg := range tag.Files {
-			if pkg.Arch == runtime.GOARCH && pkg.Os == runtime.GOOS && pkg.Kind == "archive" {
-				fmt.Println(pkg.Version)
+	// output := termenv.NewOutput(os.Stdout)
+	// output.WriteString()
+
+	fmt.Printf("OS: %v ARCH: %v\n\n", termenv.String(runtime.GOOS).Italic().Foreground(termenv.ANSIGreen), termenv.String(runtime.GOARCH).Italic().Foreground(termenv.ANSIGreen))
+
+	fmt.Println(termenv.String("Installed Versions").Bold().Foreground(termenv.ANSIBlue))
+
+	goVersions, err := listAllInstalledVersions()
+	if err != nil {
+		return err
+	}
+
+	versions := []string{}
+	for v := range goVersions {
+		versions = append(versions, v)
+	}
+
+	sort.Slice(versions, func(i, j int) bool { return versions[i] > versions[j] })
+	for _, v := range versions {
+		if goVersions[v] == DEFAULT {
+			fmt.Println(termenv.String(v, "← default").Bold())
+			continue
+		}
+		fmt.Println(termenv.String(v).Faint())
+	}
+	versions = []string{}
+	if all {
+		availableGoVersions, err := getAvailableGoVersions()
+		if err != nil {
+			return err
+		}
+		for _, tag := range availableGoVersions {
+			for _, pkg := range tag.Files {
+				if pkg.Arch == runtime.GOARCH && pkg.Os == runtime.GOOS && pkg.Kind == "archive" {
+					if _, ok := goVersions[pkg.Version]; !ok {
+						versions = append(versions, pkg.Version)
+					}
+				}
 			}
 		}
-	}
-}
 
-func getGoDownloadPackageInfo(version string) *packageInfo {
-	for _, tag := range getAvailableGoVersions() {
-		for _, pkg := range tag.Files {
-			if pkg.Arch == runtime.GOARCH && pkg.Os == runtime.GOOS && pkg.Version == version && pkg.Kind == "archive" {
-				return &pkg
-			}
+		sort.Slice(versions, func(i, j int) bool { return versions[i] > versions[j] })
+
+		fmt.Println(termenv.String("Available Versions").Bold().Foreground(termenv.ANSIBlue))
+		for _, v := range versions {
+			fmt.Println(termenv.String(v).Faint())
 		}
 	}
+
 	return nil
 }
 
-func checkVersionInstalled(version string) bool {
-	exists := false
+func getGoDownloadPackageInfo(version string) (*packageInfo, error) {
+	availableGoVersions, err := getAvailableGoVersions()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, tag := range availableGoVersions {
+		for _, pkg := range tag.Files {
+			if pkg.Arch == runtime.GOARCH && pkg.Os == runtime.GOOS && pkg.Version == version && pkg.Kind == "archive" {
+				return &pkg, nil
+			}
+		}
+	}
+	return nil, fmt.Errorf("could not find go version: %v", version)
+}
+
+func listAllInstalledVersions() (map[string]string, error) {
+	m := map[string]string{}
 	if err := DB.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(DBBucketName))
 		if bucket == nil {
-			return fmt.Errorf("bucket %v does not exist", version)
+			return fmt.Errorf("bucket %v does not exist", DBBucketName)
+		}
+
+		bucket.ForEach(func(key, value []byte) error {
+			m[string(key)] = string(value)
+			return nil
+		})
+
+		return nil
+	}); err != nil {
+		return nil, err
+	}
+
+	return m, nil
+}
+
+func checkVersionInstalled(version string) (bool, error) {
+	exists := false
+	err := DB.View(func(tx *bolt.Tx) error {
+		bucket := tx.Bucket([]byte(DBBucketName))
+		if bucket == nil {
+			return fmt.Errorf("bucket %v does not exist", DBBucketName)
 		}
 
 		if bucket.Get([]byte(version)) != nil {
@@ -102,29 +182,25 @@ func checkVersionInstalled(version string) bool {
 		}
 
 		return nil
-	}); err != nil {
-		panic(err)
-	}
-	return exists
+	})
+	return exists, err
 }
 
-func checkVersionDefault(version string) bool {
+func checkVersionDefault(version string) (bool, error) {
 	defaultVersion := false
 
-	if err := DB.View(func(tx *bolt.Tx) error {
+	err := DB.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(DBBucketName))
 		if bucket == nil {
-			return fmt.Errorf("bucket %v does not exist", version)
+			return fmt.Errorf("bucket %v does not exist", DBBucketName)
 		}
 
-		if string(bucket.Get([]byte(version))) == "default" {
+		if string(bucket.Get([]byte(version))) == DEFAULT {
 			defaultVersion = true
 		}
 
 		return nil
-	}); err != nil {
-		panic(err)
-	}
+	})
 
-	return defaultVersion
+	return defaultVersion, err
 }
