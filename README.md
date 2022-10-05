@@ -5,7 +5,7 @@ A simple Go Version Management Tool with zero dependencies
 ## Installing
 
 ```bash
-curl -sfL https://github.com/Lokesh-Balla/GoVersionManager/blob/main/install.sh | sh - 
+curl -sL https://raw.githubusercontent.com/Lokesh-Balla/GoVersionManager/main/install.sh | sh - 
 ```
 
 ## Usage
