@@ -4,9 +4,9 @@ ENV_FILE="${HOME}/.profile"
 
 # Checking the shell used
 if [ -n "`${SHELL} -c 'echo $ZSH_VERSION'`" ]; then
-   ENV_FILE="${HOME}/.zprofile"
+   ENV_FILE="${HOME}/.zshrc"
 elif [ -n "`${SHELL} -c 'echo $BASH_VERSION'`" ]; then
-   ENV_FILE="${HOME}/.profile"
+   ENV_FILE="${HOME}/.bashrc"
 else
   echo "😢 Installation Script only supports Bash and ZSH"
 fi
