@@ -25,7 +25,7 @@ esac
 # Detect Arch
 case "$(command uname -m)" in
    'arm64') ARCH="arm64";;
-   'amd64') ARCH="amd64";;
+   'x86_64') ARCH="amd64";;
    *) echo "gvm binaries are not available for $(command uname -m)" && exit 1
 esac
 
