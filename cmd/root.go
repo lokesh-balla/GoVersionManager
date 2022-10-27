@@ -24,7 +24,7 @@ var (
 	}
 
 	GoInstallationDirectory string
-	GoPath              string
+	GoPath                  string
 
 	DBPath string
 	DB     *bolt.DB
