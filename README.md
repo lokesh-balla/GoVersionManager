@@ -2,6 +2,7 @@
 
 A simple Go Version Management Tool with zero dependencies
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/Lokesh-Balla/GoVersionManager)](https://goreportcard.com/report/github.com/Lokesh-Balla/GoVersionManager)
 <p>
 <img alt="GitHub go.mod Go version" src="https://img.shields.io/github/go-mod/go-version/Lokesh-Balla/GoVersionManager">
 <a href="https://github.com/Lokesh-Balla/GoVersionManager/releases"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/Lokesh-Balla/GoVersionManager"></a>
