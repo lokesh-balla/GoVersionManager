@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# Run a build-script, from within the repository.
+#
+
+# Run make to build for all targets
+echo "Build Started"
+
+if make ; then
+    echo "Build Successful"
+else
+    echo "Build Failed"
+    exit 1
+fi
