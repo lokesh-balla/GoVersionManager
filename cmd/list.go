@@ -8,7 +8,9 @@ import (
 	"os"
 	"runtime"
 	"sort"
+	"strings"
 
+	"github.com/hashicorp/go-version"
 	"github.com/muesli/termenv"
 	"github.com/spf13/cobra"
 	bolt "go.etcd.io/bbolt"
@@ -120,7 +122,18 @@ func listGoVersions(all bool) error {
 			}
 		}
 
-		sort.Slice(versions, func(i, j int) bool { return versions[i] > versions[j] })
+		sort.Slice(versions, func(i, j int) bool {
+			v1, err := version.NewVersion(strings.TrimLeft(versions[i], "go"))
+			if err != nil {
+				return versions[i] > versions[j]
+			}
+			v2, err := version.NewVersion(strings.TrimLeft(versions[j], "go"))
+			if err != nil {
+				return versions[i] > versions[j]
+			}
+
+			return v1.GreaterThanOrEqual(v2)
+		})
 
 		fmt.Println(termenv.String("Available Versions").Bold().Foreground(termenv.ANSIBlue))
 		for _, v := range versions {
