@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/cobra/doc"
 	"github.com/spf13/viper"
 	bolt "go.etcd.io/bbolt"
 	"golang.org/x/term"
@@ -38,6 +39,11 @@ var (
 func Execute(version, build string) error {
 	// setting the version and build number
 	rootCmd.Version = fmt.Sprintf("%s build %s", version, build)
+
+	err := doc.GenMarkdownTree(rootCmd, "./docs")
+	if err != nil {
+		return err
+	}
 
 	HomeDirectory, err := os.UserHomeDir()
 	if err != nil {

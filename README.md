@@ -18,7 +18,10 @@ curl -sL https://raw.githubusercontent.com/Lokesh-Balla/GoVersionManager/main/in
 
 ## Usage
 
-To check how to use gvm you can just use the help command
+To check how to use gvm you can follow the below doc
+* [gvm](docs/gvm.md)	 - A golang version manager
+
+or check the help command
 
 ```bash
 gvm --help
