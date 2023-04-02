@@ -6,7 +6,7 @@
 # Run make to build for all targets
 echo "Build Started"
 
-if make ; then
+if make version=${{ github.event.release.tag_name }} ; then
     echo "Build Successful"
 else
     echo "Build Failed"
