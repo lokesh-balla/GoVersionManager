@@ -8,7 +8,7 @@ import (
 	bolt "go.etcd.io/bbolt"
 )
 
-// useCmd represents the use command
+// useCmd represents the use command.
 var useCmd = &cobra.Command{
 	Use:   "use",
 	Short: "specify the version of golang to use",
@@ -34,7 +34,6 @@ func init() {
 }
 
 func setGoVersion(version string) error {
-
 	// check if valid installed version
 	ok, err := checkVersionInstalled(version)
 	if err != nil {
@@ -62,7 +61,6 @@ func setGoVersion(version string) error {
 			versions = append(versions, v)
 			return nil
 		})
-
 	}); err != nil {
 		return err
 	}

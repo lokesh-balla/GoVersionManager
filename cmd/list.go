@@ -17,10 +17,10 @@ import (
 )
 
 const (
-	GO_DOWNLOAD_SERVER_URL = "https://go.dev/dl"
+	GoDownloadServerURL = "https://go.dev/dl"
 )
 
-// listCmd represents the list command
+// listCmd represents the list command.
 var listCmd = &cobra.Command{
 	Use:           "list",
 	Short:         "Lists all the go versions installed",
@@ -62,7 +62,7 @@ type packageInfo struct {
 }
 
 func getAvailableGoVersions() (goVersions, error) {
-	resp, err := http.Get(fmt.Sprintf("%v/?mode=json&include=all", GO_DOWNLOAD_SERVER_URL))
+	resp, err := http.Get(fmt.Sprintf("%v/?mode=json&include=all", GoDownloadServerURL))
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +82,6 @@ func getAvailableGoVersions() (goVersions, error) {
 }
 
 func listGoVersions(all bool) error {
-
 	fmt.Printf("OS: %v ARCH: %v\n\n", termenv.String(runtime.GOOS).Italic().Foreground(termenv.ANSIGreen), termenv.String(runtime.GOARCH).Italic().Foreground(termenv.ANSIGreen))
 
 	fmt.Println(termenv.String("Installed Versions").Bold().Foreground(termenv.ANSIBlue))

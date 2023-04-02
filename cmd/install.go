@@ -5,6 +5,7 @@ import (
 	"compress/gzip"
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -18,7 +19,7 @@ import (
 	bolt "go.etcd.io/bbolt"
 )
 
-// installCmd represents the install command
+// installCmd represents the install command.
 var installCmd = &cobra.Command{
 	Use:   "install",
 	Short: "Specify the version of golang needed to install",
@@ -44,7 +45,6 @@ func init() {
 }
 
 func drawProgressBar(output *termenv.Output, file string, width int, percent float64) {
-
 	if width < 0 || width > 120 {
 		width = 120
 	}
@@ -63,7 +63,6 @@ func drawProgressBar(output *termenv.Output, file string, width int, percent flo
 }
 
 func progressBar(file string, size int, done chan bool) error {
-
 	if size <= 0 {
 		return fmt.Errorf("invalid size %v received", size)
 	}
@@ -92,7 +91,6 @@ func progressBar(file string, size int, done chan bool) error {
 			drawProgressBar(output, file, TerminalWidth, percent)
 		}
 	}
-
 }
 
 func downloadGolang(filePath string, url string) error {
@@ -136,13 +134,12 @@ func downloadGolang(filePath string, url string) error {
 }
 
 func installGolang(version string) error {
-
 	pInfo, err := getGoDownloadPackageInfo(version)
 	if err != nil {
 		return err
 	}
 
-	url := fmt.Sprintf("%v/%v", GO_DOWNLOAD_SERVER_URL, pInfo.Filename)
+	url := fmt.Sprintf("%v/%v", GoDownloadServerURL, pInfo.Filename)
 
 	filePath := fmt.Sprintf("%s/%s", GoInstallationDirectory, pInfo.Filename)
 
@@ -193,7 +190,6 @@ func installGolang(version string) error {
 }
 
 func extractGoTar(filePath string, targetPath string) error {
-
 	madeDir := map[string]bool{}
 
 	reader, err := os.Open(filePath)
@@ -204,18 +200,18 @@ func extractGoTar(filePath string, targetPath string) error {
 
 	gzipReader, err := gzip.NewReader(reader)
 	if err != nil {
-		return fmt.Errorf("not a gzip compressed body: %v", err)
+		return fmt.Errorf("not a gzip compressed body: %w", err)
 	}
 
 	tarReader := tar.NewReader(gzipReader)
 
 	for {
 		f, err := tarReader.Next()
-		if err == io.EOF {
+		if errors.Is(err, io.EOF) {
 			break
 		}
 		if err != nil {
-			return fmt.Errorf("tar error: %v", err)
+			return fmt.Errorf("tar error: %w", err)
 		}
 		rel := filepath.FromSlash(f.Name)
 		abs := filepath.Join(targetPath, rel)
@@ -226,7 +222,7 @@ func extractGoTar(filePath string, targetPath string) error {
 		case mode.IsRegular():
 			dir := filepath.Dir(abs)
 			if !madeDir[dir] {
-				if err := os.MkdirAll(filepath.Dir(abs), 0755); err != nil {
+				if err := os.MkdirAll(filepath.Dir(abs), 0o755); err != nil {
 					return err
 				}
 				madeDir[dir] = true
@@ -240,13 +236,13 @@ func extractGoTar(filePath string, targetPath string) error {
 				err = closeErr
 			}
 			if err != nil {
-				return fmt.Errorf("error writing to %s: %v", abs, err)
+				return fmt.Errorf("error writing to %s: %w", abs, err)
 			}
 			if n != f.Size {
 				return fmt.Errorf("only wrote %d bytes to %s; expected %d", n, abs, f.Size)
 			}
 		case mode.IsDir():
-			if err := os.MkdirAll(abs, 0755); err != nil {
+			if err := os.MkdirAll(abs, 0o755); err != nil {
 				return err
 			}
 			madeDir[abs] = true
@@ -258,8 +254,7 @@ func extractGoTar(filePath string, targetPath string) error {
 	return nil
 }
 
-func checkSHA256Sum(filePath string, SHA256 string) (bool, error) {
-
+func checkSHA256Sum(filePath string, sha256hash string) (bool, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
 		return false, err
@@ -271,7 +266,7 @@ func checkSHA256Sum(filePath string, SHA256 string) (bool, error) {
 		return false, err
 	}
 
-	if SHA256 != hex.EncodeToString(hash.Sum(nil)) {
+	if sha256hash != hex.EncodeToString(hash.Sum(nil)) {
 		return false, nil
 	}
 

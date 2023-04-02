@@ -36,7 +36,6 @@ var (
 
 // Execute executes the root command.
 func Execute(version, build string) error {
-
 	// setting the version and build number
 	rootCmd.Version = fmt.Sprintf("%s build %s", version, build)
 
@@ -47,7 +46,7 @@ func Execute(version, build string) error {
 
 	GoInstallationDirectory = fmt.Sprintf("%s/.gvm", HomeDirectory)
 	if _, err := os.Stat(GoInstallationDirectory); os.IsNotExist(err) {
-		if err := os.Mkdir(GoInstallationDirectory, 0775); err != nil {
+		if err := os.Mkdir(GoInstallationDirectory, 0o775); err != nil {
 			return err
 		}
 	}
@@ -60,7 +59,7 @@ func Execute(version, build string) error {
 
 	DBPath = fmt.Sprintf("%s/metadata.db", GoInstallationDirectory)
 
-	DB, err = bolt.Open(DBPath, 0666, &bolt.Options{Timeout: 2 * time.Second})
+	DB, err = bolt.Open(DBPath, 0o666, &bolt.Options{Timeout: 2 * time.Second})
 	if err != nil {
 		return err
 	}

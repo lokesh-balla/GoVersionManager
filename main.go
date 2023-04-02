@@ -14,7 +14,6 @@ var (
 )
 
 func main() {
-
 	if version == "" {
 		version = "dev"
 	}

@@ -8,7 +8,7 @@ import (
 	bolt "go.etcd.io/bbolt"
 )
 
-// uninstallCmd represents the uninstall command
+// uninstallCmd represents the uninstall command.
 var uninstallCmd = &cobra.Command{
 	Use:   "uninstall",
 	Short: "Specify the version of golang needed to uninstalled/removed",
@@ -34,7 +34,6 @@ func init() {
 }
 
 func removeGoVersion(version string) error {
-
 	// check if valid installed version
 	ok, err := checkVersionInstalled(version)
 	if err != nil {
