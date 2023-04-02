@@ -18,9 +18,10 @@ const (
 
 var (
 	rootCmd = &cobra.Command{
-		Use:   "gvm",
-		Short: "A golang version manager",
-		Long:  `A Simple dependency free golang version manager`,
+		Use:               "gvm",
+		Short:             "A golang version manager",
+		Long:              `A Simple dependency free golang version manager`,
+		DisableAutoGenTag: true,
 	}
 
 	GoInstallationDirectory string
@@ -34,7 +35,10 @@ var (
 )
 
 // Execute executes the root command.
-func Execute() error {
+func Execute(version, build string) error {
+
+	// setting the version and build number
+	rootCmd.Version = fmt.Sprintf("%s build %s", version, build)
 
 	HomeDirectory, err := os.UserHomeDir()
 	if err != nil {
@@ -49,7 +53,7 @@ func Execute() error {
 	}
 	GoPath = fmt.Sprintf("%s/go", GoInstallationDirectory)
 
-	TerminalWidth, TerminalHeight, err = term.GetSize(int(os.Stdout.Fd()))
+	TerminalWidth, TerminalHeight, err = term.GetSize(0)
 	if err != nil {
 		return err
 	}
