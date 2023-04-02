@@ -7,8 +7,14 @@ A simple Go Version Management Tool with zero dependencies
 <img alt="GitHub go.mod Go version" src="https://img.shields.io/github/go-mod/go-version/Lokesh-Balla/GoVersionManager">
 <a href="https://github.com/Lokesh-Balla/GoVersionManager/releases"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/Lokesh-Balla/GoVersionManager"></a>
 <a href="https://pkg.go.dev/github.com/Lokesh-Balla/GoVersionManager?tab=doc"><img src="https://godoc.org/github.com/golang/gddo?status.svg" alt="GoDoc"></a>
-<a href="https://github.com/Lokesh-Balla/GoVersionManager/actions"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/Lokesh-Balla/GoVersionManager/Go"></a>
+<img alt="GitHub" src="https://img.shields.io/github/license/Lokesh-Balla/GoVersionManager">
+<img alt="GitHub Workflow Status (with branch)" src="https://img.shields.io/github/actions/workflow/status/Lokesh-Balla/GoVersionManager/go.yml?branch=main">
+<img alt="GitHub Workflow Status (with branch)" src="https://img.shields.io/github/actions/workflow/status/Lokesh-Balla/GoVersionManager/golangci-lint.yml?branch=main&label=golangci-lint">
+<img alt="GitHub Workflow Status (with branch)" src="https://img.shields.io/github/actions/workflow/status/Lokesh-Balla/GoVersionManager/codeql.yml?branch=main&label=CodeQL">
+<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Lokesh-Balla/GoVersionManager">
+<img alt="GitHub all releases" src="https://img.shields.io/github/downloads/Lokesh-Balla/GoVersionManager/total">
 </p>
+
 
 ## Installing
 
