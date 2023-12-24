@@ -10,8 +10,9 @@ import (
 
 // uninstallCmd represents the uninstall command.
 var uninstallCmd = &cobra.Command{
-	Use:   "uninstall",
-	Short: "Specify the version of golang needed to uninstalled/removed",
+	Use:     "uninstall",
+	Aliases: []string{"remove"},
+	Short:   "Specify the version of golang needed to uninstalled/removed",
 	Long: `Specify the version of golang needed to uninstalled/removed
 
 		# To remove a specific version
