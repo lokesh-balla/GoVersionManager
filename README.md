@@ -21,6 +21,8 @@ A simple Go Version Management Tool with zero dependencies
 ```bash
 curl -sL https://raw.githubusercontent.com/Lokesh-Balla/GoVersionManager/main/install.sh | sh - 
 ```
+![Installation GIF](docs/demo.gif)
+
 
 ## Usage
 
