@@ -27,7 +27,7 @@ var listCmd = &cobra.Command{
 	Long:          `Lists all the go version installed`,
 	SilenceErrors: true,
 	SilenceUsage:  true,
-	RunE: func(cmd *cobra.Command, args []string) error {
+	RunE: func(cmd *cobra.Command, _ []string) error {
 		getAll, err := cmd.Flags().GetBool("all")
 		if err != nil {
 			return err
@@ -167,7 +167,7 @@ func listAllInstalledVersions() (map[string]string, error) {
 			return fmt.Errorf("bucket %v does not exist", DBBucketName)
 		}
 
-		bucket.ForEach(func(key, value []byte) error {
+		_ = bucket.ForEach(func(key, value []byte) error {
 			m[string(key)] = string(value)
 			return nil
 		})

@@ -19,7 +19,7 @@ var useCmd = &cobra.Command{
 	`,
 	SilenceErrors: true,
 	SilenceUsage:  true,
-	RunE: func(cmd *cobra.Command, args []string) error {
+	RunE: func(_ *cobra.Command, args []string) error {
 		if len(args) == 1 {
 			if err := setGoVersion(args[0]); err != nil {
 				return err

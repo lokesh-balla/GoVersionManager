@@ -30,7 +30,7 @@ var installCmd = &cobra.Command{
 	`,
 	SilenceErrors: true,
 	SilenceUsage:  true,
-	RunE: func(cmd *cobra.Command, args []string) error {
+	RunE: func(_ *cobra.Command, args []string) error {
 		if len(args) == 1 {
 			if err := installGolang(args[0]); err != nil {
 				return err
@@ -59,7 +59,7 @@ func drawProgressBar(output *termenv.Output, file string, width int, percent flo
 		}
 	}
 	drawString = fmt.Sprintf("%s %.0f%%", drawString, percent)
-	output.WriteString(drawString)
+	_, _ = output.WriteString(drawString)
 }
 
 func progressBar(file string, size int, done chan bool) error {
@@ -93,7 +93,7 @@ func progressBar(file string, size int, done chan bool) error {
 	}
 }
 
-func downloadGolang(filePath string, url string) error {
+func downloadGolang(filePath, url string) error {
 	headResp, err := http.Head(url)
 	if err != nil {
 		return err
@@ -189,7 +189,7 @@ func installGolang(version string) error {
 	return nil
 }
 
-func extractGoTar(filePath string, targetPath string) error {
+func extractGoTar(filePath, targetPath string) error {
 	madeDir := map[string]bool{}
 
 	reader, err := os.Open(filePath)
@@ -254,7 +254,7 @@ func extractGoTar(filePath string, targetPath string) error {
 	return nil
 }
 
-func checkSHA256Sum(filePath string, sha256hash string) (bool, error) {
+func checkSHA256Sum(filePath, sha256hash string) (bool, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
 		return false, err
