@@ -13,6 +13,7 @@ A simple Go Version Management Tool with zero dependencies
 <img alt="GitHub Workflow Status (with branch)" src="https://img.shields.io/github/actions/workflow/status/Lokesh-Balla/GoVersionManager/codeql.yml?branch=main&label=CodeQL">
 <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Lokesh-Balla/GoVersionManager">
 <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/Lokesh-Balla/GoVersionManager/total">
+<img alt="GitHub commits since latest release" src="https://img.shields.io/github/commits-since/lokesh-balla/GoVersionManager/latest">
 </p>
 
 
