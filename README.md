@@ -1,5 +1,9 @@
 # GoVersionManager
 
+<p align="center">
+<img width="512" height="512" alt="icon" src="https://github.com/user-attachments/assets/d633b1b0-d0af-40e9-9d29-df16dfac3d39" />
+</p>
+
 A simple Go Version Management Tool with zero dependencies
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/Lokesh-Balla/GoVersionManager)](https://goreportcard.com/report/github.com/Lokesh-Balla/GoVersionManager)
