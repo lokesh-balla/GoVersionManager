@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Install Command - gvm
+title: Install Command
 parent: Commands
 nav_order: 1
 ---

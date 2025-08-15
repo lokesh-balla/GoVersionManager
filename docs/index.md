@@ -1,11 +1,19 @@
 ---
 layout: default
-title: gvm - Home
+title: Home
+nav_order: 1
 ---
 
 # gvm
+{: .fs-9 }
 
 A simple Go Version Management Tool with zero dependencies
+{: .fs-6 .fw-300 }
+
+[Get Started](#quick-start){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+[View on GitHub](https://github.com/lokesh-balla/gvm){: .btn .fs-5 .mb-4 .mb-md-0 }
+
+---
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/lokesh-balla/gvm)](https://goreportcard.com/report/github.com/lokesh-balla/gvm)
 [![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/lokesh-balla/gvm)](https://github.com/lokesh-balla/gvm)
@@ -18,7 +26,7 @@ A simple Go Version Management Tool with zero dependencies
 ### Installing
 
 ```bash
-curl -sL https://raw.githubusercontent.com/lokesh-balla/gvm/main/install.sh | sh - 
+curl -sL https://raw.githubusercontent.com/lokesh-balla/gvm/main/install.sh | sh
 ```
 
 ![Installation GIF](demo.gif)
@@ -78,10 +86,7 @@ go build -o gvm main.go
 
 ## Uninstall
 
+To uninstall `gvm`, run the following command:
+
 ```bash
 rm -rf ~/.gvm
-```
-
-### Removing PATH
-
-Check and remove any PATH set for `$HOME/.gvm` or `$HOME/.gvm/bin` in `~/.profile`, `~/.bashrc` and `~/.zshenv`

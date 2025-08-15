@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Uninstall Command - gvm
+title: Uninstall Command
 parent: Commands
 nav_order: 4
 ---

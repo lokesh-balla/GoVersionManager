@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Commands - gvm
+title: Commands
 nav_order: 2
 has_children: true
 permalink: /commands

@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Use Command - gvm
+title: Use Command
 parent: Commands
 nav_order: 3
 ---

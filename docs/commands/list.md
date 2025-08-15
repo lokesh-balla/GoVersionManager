@@ -1,6 +1,6 @@
 ---
 layout: default
-title: List Command - gvm
+title: List Command
 parent: Commands
 nav_order: 2
 ---

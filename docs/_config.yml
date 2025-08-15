@@ -1,6 +1,12 @@
-title: gvm Documentation
+title: gvm
 description: A simple Go Version Management Tool with zero dependencies
 theme: jekyll-theme-primer
+
+repository: lokesh-balla/gvm
+
+header_pages:
+  - index.md
+  - commands/index.md
 
 plugins:
   - jekyll-sitemap
