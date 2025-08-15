@@ -1,20 +1,31 @@
+version: "2"
 linters:
-  fast: true
-  disable-all: true
+  default: none
   enable:
-    - revive
     - errcheck
-    - gosimple
+    - gosec
     - govet
     - ineffassign
+    - revive
     - staticcheck
     - unused
+    - fatcontext
+  settings:
+    gosec:
+      excludes:
+        - G107
+        - G110
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - std-error-handling
+      - common-false-positives
+      - legacy
+formatters:
+  enable:
     - gofumpt
-    - gosec
-linters-settings:
-  gofumpt:
-    extra-rules: true
-  gosec:
-    excludes:
-      - G107 # Url provided to HTTP request as taint input
-      - G110 # Potential DoS vulnerability via decompression bomb
+    - gci
+  settings:
+    gofumpt:
+      extra-rules: true

@@ -20,5 +20,8 @@ compile-freebsd-arm64:
 compile-freebsd-amd64:
 	CGO_ENABLED=0 GOOS=freebsd GOARCH=amd64 go build -o ./bin/gvm_freebsd_amd64 --tags netgo -ldflags $(ldflags) main.go
 
+vet:
+	go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.4.0 run --fix ./...
+
 clean:
 	if [ -d "./bin" ]; then rm -rf ./bin; fi

@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/muesli/termenv"
@@ -27,21 +28,52 @@ var installCmd = &cobra.Command{
 
 	# To install a specific version
 	$ gvm install go1.19
+	
+	# To install the latest stable version
+	$ gvm install --latest
 	`,
 	SilenceErrors: true,
 	SilenceUsage:  true,
-	RunE: func(_ *cobra.Command, args []string) error {
-		if len(args) == 1 {
-			if err := installGolang(args[0]); err != nil {
-				return err
+	RunE: func(cmd *cobra.Command, args []string) error {
+		latestFlag, _ := cmd.Flags().GetBool("latest")
+
+		if latestFlag {
+			if len(args) > 0 {
+				return errors.New("cannot specify version when using --latest flag")
 			}
+			version, err := fetchLatestVersion()
+			if err != nil {
+				return fmt.Errorf("failed to fetch latest version: %w", err)
+			}
+			return installGolang(version)
 		}
-		return nil
+
+		if len(args) == 1 {
+			return installGolang(args[0])
+		}
+
+		return errors.New("must specify version or use --latest flag")
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(installCmd)
+	installCmd.Flags().Bool("latest", false, "Install latest stable Go version")
+}
+
+func fetchLatestVersion() (string, error) {
+	resp, err := http.Get(fmt.Sprintf("%s/VERSION?m=text", strings.TrimRight(GoDownloadServerURL, "/dl")))
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	return strings.Split(strings.TrimSpace(string(body)), "\n")[0], nil
 }
 
 func drawProgressBar(output *termenv.Output, file string, width int, percent float64) {
