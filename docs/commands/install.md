@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Install Command - GoVersionManager
+title: Install Command - gvm
 parent: Commands
 nav_order: 1
 ---

@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Uninstall Command - GoVersionManager
+title: Uninstall Command - gvm
 parent: Commands
 nav_order: 4
 ---

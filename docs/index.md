@@ -1,24 +1,24 @@
 ---
 layout: default
-title: GoVersionManager - Home
+title: gvm - Home
 ---
 
-# GoVersionManager
+# gvm
 
 A simple Go Version Management Tool with zero dependencies
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/Lokesh-Balla/GoVersionManager)](https://goreportcard.com/report/github.com/Lokesh-Balla/GoVersionManager)
-[![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/Lokesh-Balla/GoVersionManager)](https://github.com/Lokesh-Balla/GoVersionManager)
-[![GitHub release](https://img.shields.io/github/v/release/Lokesh-Balla/GoVersionManager)](https://github.com/Lokesh-Balla/GoVersionManager/releases)
-[![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://pkg.go.dev/github.com/Lokesh-Balla/GoVersionManager?tab=doc)
-[![GitHub license](https://img.shields.io/github/license/Lokesh-Balla/GoVersionManager)](LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Lokesh-Balla/gvm)](https://goreportcard.com/report/github.com/Lokesh-Balla/gvm)
+[![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/Lokesh-Balla/gvm)](https://github.com/Lokesh-Balla/gvm)
+[![GitHub release](https://img.shields.io/github/v/release/Lokesh-Balla/gvm)](https://github.com/Lokesh-Balla/gvm/releases)
+[![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://pkg.go.dev/github.com/Lokesh-Balla/gvm?tab=doc)
+[![GitHub license](https://img.shields.io/github/license/Lokesh-Balla/gvm)](LICENSE)
 
 ## Quick Start
 
 ### Installing
 
 ```bash
-curl -sL https://raw.githubusercontent.com/Lokesh-Balla/GoVersionManager/main/install.sh | sh - 
+curl -sL https://raw.githubusercontent.com/Lokesh-Balla/gvm/main/install.sh | sh - 
 ```
 
 ![Installation GIF](demo.gif)
@@ -43,7 +43,7 @@ gvm uninstall 1.21.0
 
 ## Available Commands
 
-GoVersionManager provides the following commands:
+gvm provides the following commands:
 
 - **[install](commands/install)** - Install Go versions
 - **[list](commands/list)** - List available/installed versions
@@ -72,7 +72,7 @@ gvm [command] --help
 ### Compiling
 
 ```bash
-git clone https://github.com/Lokesh-Balla/GoVersionManager.git && cd GoVersionManager
+git clone https://github.com/Lokesh-Balla/gvm.git && cd gvm
 go build -o gvm main.go
 ```
 

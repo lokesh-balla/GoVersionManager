@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Use Command - GoVersionManager
+title: Use Command - gvm
 parent: Commands
 nav_order: 3
 ---

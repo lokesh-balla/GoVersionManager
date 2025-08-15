@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Commands - GoVersionManager
+title: Commands - gvm
 nav_order: 2
 has_children: true
 permalink: /commands
@@ -8,7 +8,7 @@ permalink: /commands
 
 # Commands
 
-GoVersionManager provides a simple command-line interface for managing multiple Go versions. All commands follow a consistent pattern and provide helpful error messages.
+gvm provides a simple command-line interface for managing multiple Go versions. All commands follow a consistent pattern and provide helpful error messages.
 
 ## Command Overview
 
