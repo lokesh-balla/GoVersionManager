@@ -1,7 +1,7 @@
 # gvm
 
 <p align="center">
-<img width="512" height="512" alt="icon" src="https://github.com/user-attachments/assets/d633b1b0-d0af-40e9-9d29-df16dfac3d39" />
+<img width="512" height="512" alt="icon" src="docs/gvm.png" />
 </p>
 
 A simple Go Version Management Tool with zero dependencies
@@ -31,10 +31,7 @@ curl -sL https://raw.githubusercontent.com/lokesh-balla/gvm/main/install.sh | sh
 
 ## Usage
 
-To check how to use gvm you can follow the below doc
-* [gvm](docs/gvm.md)	 - A golang version manager
-
-or check the help command
+To check how to use gvm you can check the help command
 
 ```bash
 gvm --help
