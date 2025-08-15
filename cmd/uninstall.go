@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 	bolt "go.etcd.io/bbolt"
@@ -35,6 +36,9 @@ func init() {
 }
 
 func removeGoVersion(version string) error {
+	if !strings.HasPrefix(version, "go") {
+		version = fmt.Sprintf("go%s", version)
+	}
 	// check if valid installed version
 	ok, err := checkVersionInstalled(version)
 	if err != nil {

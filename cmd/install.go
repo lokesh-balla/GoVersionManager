@@ -166,6 +166,10 @@ func downloadGolang(filePath, url string) error {
 }
 
 func installGolang(version string) error {
+	if !strings.HasPrefix(version, "go") {
+		version = fmt.Sprintf("go%s", version)
+	}
+
 	pInfo, err := getGoDownloadPackageInfo(version)
 	if err != nil {
 		return err

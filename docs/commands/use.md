@@ -26,11 +26,6 @@ The use command allows you to switch between different installed Go versions by 
 gvm use go1.19
 ```
 
-**Output:**
-```
-go1.19 is now the default version
-```
-
 ## How It Works
 
 When you run `gvm use`, the following happens:

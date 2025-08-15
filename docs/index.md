@@ -7,18 +7,18 @@ title: gvm - Home
 
 A simple Go Version Management Tool with zero dependencies
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/Lokesh-Balla/gvm)](https://goreportcard.com/report/github.com/Lokesh-Balla/gvm)
-[![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/Lokesh-Balla/gvm)](https://github.com/Lokesh-Balla/gvm)
-[![GitHub release](https://img.shields.io/github/v/release/Lokesh-Balla/gvm)](https://github.com/Lokesh-Balla/gvm/releases)
-[![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://pkg.go.dev/github.com/Lokesh-Balla/gvm?tab=doc)
-[![GitHub license](https://img.shields.io/github/license/Lokesh-Balla/gvm)](LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/lokesh-balla/gvm)](https://goreportcard.com/report/github.com/lokesh-balla/gvm)
+[![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/lokesh-balla/gvm)](https://github.com/lokesh-balla/gvm)
+[![GitHub release](https://img.shields.io/github/v/release/lokesh-balla/gvm)](https://github.com/lokesh-balla/gvm/releases)
+[![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://pkg.go.dev/github.com/lokesh-balla/gvm?tab=doc)
+[![GitHub license](https://img.shields.io/github/license/lokesh-balla/gvm)](LICENSE)
 
 ## Quick Start
 
 ### Installing
 
 ```bash
-curl -sL https://raw.githubusercontent.com/Lokesh-Balla/gvm/main/install.sh | sh - 
+curl -sL https://raw.githubusercontent.com/lokesh-balla/gvm/main/install.sh | sh - 
 ```
 
 ![Installation GIF](demo.gif)
@@ -72,7 +72,7 @@ gvm [command] --help
 ### Compiling
 
 ```bash
-git clone https://github.com/Lokesh-Balla/gvm.git && cd gvm
+git clone https://github.com/lokesh-balla/gvm.git && cd gvm
 go build -o gvm main.go
 ```
 

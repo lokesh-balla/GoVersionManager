@@ -27,11 +27,6 @@ The uninstall command (also available as `remove`) allows you to remove specific
 gvm uninstall go1.19
 ```
 
-**Output:**
-```
-go1.19 has been uninstalled
-```
-
 ### Use the alias command
 ```bash
 gvm remove go1.18

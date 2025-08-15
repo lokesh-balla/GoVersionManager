@@ -20,6 +20,13 @@ A simple Go Version Management Tool with zero dependencies
 <img alt="GitHub commits since latest release" src="https://img.shields.io/github/commits-since/lokesh-balla/gvm/latest">
 </p>
 
+## Table of Contents
+
+- [Installing](#installing)
+- [Usage](#usage)
+- [Commands](#commands)
+- [Compiling From Source](#compiling-from-source)
+- [Uninstall](#uninstall)
 
 ## Installing
 
@@ -36,6 +43,17 @@ To check how to use gvm you can check the help command
 ```bash
 gvm --help
 ```
+
+## Commands
+
+gvm provides the following commands:
+
+- **install** - Install Go versions
+- **list** - List available/installed versions
+- **use** - Switch between Go versions
+- **uninstall** - Remove installed versions
+
+For detailed information about each command, visit the [docs](https://lokesh-balla.github.io/gvm/commands/).
 
 ## Compiling From Source
 
