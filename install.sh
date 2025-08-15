@@ -12,7 +12,7 @@ else
 fi
 
 # Getting Release Tag
-TAG=$(curl -LIs -o /dev/null -w %{url_effective} https://github.com/lokesh-balla/GoVersionManager/releases/latest | rev | cut -d / -f 1 | rev)
+TAG=$(curl -LIs -o /dev/null -w %{url_effective} https://github.com/lokesh-balla/gvm/releases/latest | rev | cut -d / -f 1 | rev)
 
 # Detect OS
 case "$(command uname)" in
@@ -31,7 +31,7 @@ case "$(command uname -m)" in
 esac
 
 BINARY=$(echo "gvm_${OS}_${ARCH}")
-URL=$(echo "https://github.com/Lokesh-Balla/GoVersionManager/releases/download/${TAG}/${BINARY}")
+URL=$(echo "https://github.com/lokesh-balla/gvm/releases/download/${TAG}/${BINARY}")
 
 echo "Installing ${BINARY} version ${TAG} from ${URL}"
 
