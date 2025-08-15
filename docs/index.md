@@ -13,6 +13,10 @@ A simple Go Version Management Tool with zero dependencies
 [Get Started](#quick-start){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 [View on GitHub](https://github.com/lokesh-balla/gvm){: .btn .fs-5 .mb-4 .mb-md-0 }
 
+<p align="center">
+  <img src="gvm.png" alt="gvm logo" width="150"/>
+</p>
+
 ---
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/lokesh-balla/gvm)](https://goreportcard.com/report/github.com/lokesh-balla/gvm)
