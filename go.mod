@@ -1,4 +1,4 @@
-module github.com/Lokesh-Balla/GoVersionManager
+module github.com/lokesh-balla/gvm
 
 go 1.25
 

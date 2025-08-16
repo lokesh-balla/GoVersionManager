@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/Lokesh-Balla/GoVersionManager/cmd"
+	"github.com/lokesh-balla/gvm/cmd"
 )
 
 var (
